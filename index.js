@@ -1,6 +1,6 @@
 const express = require('express');
 const admin = require('firebase-admin');
-const axios = require('axios'); 
+const https = require('https'); // Native library, koi error nhi aayega
 const app = express();
 
 const serviceAccount = require("./firebase-key.json");
@@ -34,16 +34,15 @@ app.get('/callback', async (req, res) => {
     }
 });
 
-// Yahan dekho maine ' ' (quotes) sahi kar diye hain
-const RENDER_URL = 'https://earnflow-backend-45gw.onrender.com/callback?uid=testuser&payout=1'; 
+// Pani wala robot (Native module use kiya hai, ab crash nhi hoga)
+const RENDER_URL = 'https://earnflow-backend-45gw.onrender.com/callback?uid=testuser&payout=1';
 
-const robotPunchServer = async () => {
-    try {
-        await axios.get(RENDER_URL);
-        console.log("ROBOT: Pani Wala Punch! Server is awake.");
-    } catch (error) {
+const robotPunchServer = () => {
+    https.get(RENDER_URL, (res) => {
+        console.log("ROBOT: Pani Wala Punch! Server Status:", res.statusCode);
+    }).on('error', (e) => {
         console.log("ROBOT: Punching...");
-    }
+    });
 };
 
 setInterval(robotPunchServer, 600000); 
