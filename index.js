@@ -52,9 +52,11 @@ app.get('/mylead-callback', async (req, res) => {
         const status = req.query.status;
 
                 // MyLead ka status check (Agar 1 ya approved dono mein se kuch bhi ho toh aage badhne do)
-        if (status !== '1' && status !== 'approved' && status !== 'Approved') {
+               // MyLead status check filter (Testing ke liye '0' ko bhi allow kar rahe hain)
+        if (status !== '1' && status !== 'approved' && status !== 'Approved' && status !== '0') {
             return res.status(200).send("Status not approved");
         }
+
 
 
         if (!userId || amount <= 0) {
