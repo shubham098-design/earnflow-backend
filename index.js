@@ -44,15 +44,18 @@ app.get('/callback', async (req, res) => {
 // --- NEW ROUTE: MYLEAD OFFERWALL POSTBACK ---
 app.get('/mylead-callback', async (req, res) => {
     try {
+      console.log("MyLead Hit Hua! Data aaya:", req.query);
+
         const userId = req.query.user_id;
         // MyLead se aane wale points ko float/int mein convert karna
         const amount = parseFloat(req.query.coins || 0); 
         const status = req.query.status;
 
-        // MyLead mein status '1' ka matlab hota hai task successfully approved/completed hai
-        if (status !== '1') {
+                // MyLead ka status check (Agar 1 ya approved dono mein se kuch bhi ho toh aage badhne do)
+        if (status !== '1' && status !== 'approved' && status !== 'Approved') {
             return res.status(200).send("Status not approved");
         }
+
 
         if (!userId || amount <= 0) {
             return res.status(400).send("Invalid data");
